@@ -49,7 +49,7 @@
 			? null
 			: value.map((data) => ({
 					image: data.image as FileData,
-					caption: data.caption
+					caption: data.caption,
 				}));
 
 	let prev_value: GalleryData | null = value;
@@ -59,13 +59,10 @@
 	let old_selected_index: number | null = selected_index;
 
 	$: if (!dequal(prev_value, value)) {
-		// When value is falsy (clear button or first load),
-		// preview determines the selected image
+		// If value is falsy (clear button or first load), preview determines the selected image
 		if (was_reset) {
-			selected_index = preview && value?.length ? 0 : null;
+			selected_index = preview && value?.length ? selected_index ?? 0 : null;
 			was_reset = false;
-			// Otherwise we keep the selected_index the same if the
-			// gallery has at least as many elements as it did before
 		} else {
 			selected_index =
 				selected_index != null && value != null && selected_index < value.length
@@ -119,7 +116,7 @@
 			if (selected_index !== null) {
 				dispatch("select", {
 					index: selected_index,
-					value: resolved_value?.[selected_index]
+					value: resolved_value?.[selected_index],
 				});
 			}
 		}
@@ -155,7 +152,7 @@
 		if (container_element && typeof container_element.scrollTo === "function") {
 			container_element.scrollTo({
 				left: pos < 0 ? 0 : pos,
-				behavior: "smooth"
+				behavior: "smooth",
 			});
 		}
 	}
